@@ -77,5 +77,27 @@ namespace Util
             
             return true;
         }
+
+        /// <summary>
+        /// 是否具有指定类型
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static bool HasType(string typeName)
+        {
+            var type = Type.GetType(typeName);
+
+            if (type == null)
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    type = assembly.GetType(typeName);
+                    if (type != null)
+                        break;
+                }
+            }
+
+            return type != null;
+        }
     }
 }
