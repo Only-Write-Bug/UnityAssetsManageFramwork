@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -11,18 +12,29 @@ namespace Util
             public string key = null;
             public List<object> children = new List<object>();
         }
+        
+        /// <summary>
+        /// 生成json文件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="generatePath"></param>
+        public static void GenerateJsonFile<T>(T data, string generatePath)
+        {
+            var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
+            File.WriteAllText(generatePath, jsonString);
+        }
 
         /// <summary>
         /// 解析json文件
         /// </summary>
         /// <param name="jsonPath"></param>
         /// <returns></returns>
-        public static JsonDataBase ParseJsonFile(string jsonPath)
+        public static object ParseJsonFile<T>(string jsonPath)
         {
             if (!File.Exists(jsonPath))
                 return null;
 
-            return ParseJsonString(File.ReadAllText(jsonPath));
+            return ParseJsonString<T>(File.ReadAllText(jsonPath));
         }
         
         /// <summary>
@@ -30,12 +42,12 @@ namespace Util
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
-        public static JsonDataBase ParseJsonString(string jsonString)
+        public static T ParseJsonString<T>(string jsonString)
         {
-            return JsonConvert.DeserializeObject<JsonDataBase>(jsonString);
+            return JsonConvert.DeserializeObject<T>(jsonString);
         }
         
-        public static void SaveJsonFile(JsonDataBase data, string jsonPath)
+        public static void SaveJsonFile<T>(T data, string jsonPath)
         {
             var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(jsonPath, jsonString);

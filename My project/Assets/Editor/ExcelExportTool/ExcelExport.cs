@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Editor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
@@ -13,15 +12,20 @@ using Util;
 
 public class ExcelExport
 {
-    private const string ExcelDirectory = "Excel";
-    private const string ExcelModifyDirtyDirectory = @"Excel\ModifyTimeJSON";
-    private const string ExcelScriptDirectory = @"Assets\Scripts\Common\Excel";
-    private const string ExcelDataJsonDirectory = @"Assets\Resources\JSON\Excel";
+    private const string _ExcelDirectory = "Excel";
+    private const string _ExcelModifyDirtyDirectory = @"Excel\ModifyTimeJSON";
+    private const string _ExcelScriptDirectory = @"Assets\Scripts\Common\Excel";
+    private const string _ExcelDataJsonDirectory = @"Assets\Resources\JSON\Excel";
 
-    private static string excelPath = null;
-    private static string ExcelModifyDirtyPath = null;
-    private static string excelScriptPath = null;
-    private static string excelDataJsonPath = null;
+    private static string _excelPath = null;
+    private static string _ExcelModifyDirtyPath = null;
+    private static string _excelScriptPath = null;
+    private static string _excelDataJsonPath = null;
+
+    private static string _curExportExcelPath = null;
+    
+    private static float _compileWaitTime = 0f;
+    private static readonly float compileWaitDuration = 3f;
 
     [MenuItem("Editor Tool/Excel Export")]
     public static void Export()
@@ -34,36 +38,59 @@ public class ExcelExport
             var excelData = DataStructUtil.Reverse2DArray(ReadExcel(excelPath));
             if (excelData == null)
                 continue;
-            if (!GenerateDataStructScript(excelPath, excelData))
+            if (GenerateDataStructScript(excelPath, excelData))
             {
-                continue;
+                _curExportExcelPath = excelPath;
+                AssetDatabase.Refresh();
+                EditorApplication.update += OnScriptForcedCompile;
+            }
+            else
+            {
+                TryDeleteExcelModifyTimeJson(excelPath);
+                TryDeleteExcelDataJson(excelPath);
             }
         }
-
-        AssetDatabase.Refresh();
     }
 
     private static bool CheckDirectory()
     {
-        excelPath = Path.Combine(Directory.GetCurrentDirectory(), ExcelDirectory);
-        ExcelModifyDirtyPath = Path.Combine(Directory.GetCurrentDirectory(), ExcelModifyDirtyDirectory);
-        excelScriptPath = Path.Combine(Directory.GetCurrentDirectory(), ExcelScriptDirectory);
-        excelDataJsonPath = Path.Combine(Directory.GetCurrentDirectory(), ExcelDataJsonDirectory);
+        _excelPath = Path.Combine(Directory.GetCurrentDirectory(), _ExcelDirectory);
+        _ExcelModifyDirtyPath = Path.Combine(Directory.GetCurrentDirectory(), _ExcelModifyDirtyDirectory);
+        _excelScriptPath = Path.Combine(Directory.GetCurrentDirectory(), _ExcelScriptDirectory);
+        _excelDataJsonPath = Path.Combine(Directory.GetCurrentDirectory(), _ExcelDataJsonDirectory);
 
-        return IOUtil.TryCreateDirectory(excelPath) && IOUtil.TryCreateDirectory(ExcelModifyDirtyPath) &&
-               IOUtil.TryCreateDirectory(ExcelScriptDirectory) && IOUtil.TryCreateDirectory(excelDataJsonPath);
+        return IOUtil.TryCreateDirectory(_excelPath) && IOUtil.TryCreateDirectory(_ExcelModifyDirtyPath) &&
+               IOUtil.TryCreateDirectory(_ExcelScriptDirectory) && IOUtil.TryCreateDirectory(_excelDataJsonPath);
+    }
+
+    private static void OnScriptForcedCompile()
+    {
+        if (!EditorApplication.isCompiling)
+        {
+            _compileWaitTime += Time.deltaTime;
+            if (_compileWaitTime >= compileWaitDuration)
+            {
+                if (GenerateExcelDataJson(_curExportExcelPath))
+                {
+                    EditorApplication.update -= OnScriptForcedCompile;
+                    _curExportExcelPath = null;
+                    Debug.Log("Excel Export Over!!!");
+                }
+                _compileWaitTime = 0f; // 重置等待时间
+            }
+        }
     }
 
     private static List<string> GetUpdatedExcel()
     {
         var updatedExcel = new List<string>();
 
-        foreach (var path in Directory.GetFiles(ExcelDirectory, "*.xlsx"))
+        foreach (var path in Directory.GetFiles(_ExcelDirectory, "*.xlsx"))
         {
             var excelFileName = Path.GetFileNameWithoutExtension(path);
             var jsonFileName = JsonNameFactory(excelFileName);
 
-            var targetFiles = Directory.GetFiles(ExcelModifyDirtyPath, jsonFileName);
+            var targetFiles = Directory.GetFiles(_ExcelModifyDirtyPath, jsonFileName);
             if (targetFiles.Length <= 0)
             {
                 updatedExcel.Add(path);
@@ -92,22 +119,22 @@ public class ExcelExport
         };
         jsonData.children.Add(new { lastRecordingTime = DateTime.Now.ToString("O") });
 
-        GenerateTool.GenerateJSON(jsonData, GetExcelModifyTimeJson(excelPath));
+        JsonUtil.GenerateJsonFile(jsonData, GetExcelModifyTimeJson(excelPath));
     }
 
     private static string GetExcelModifyTimeJson(string excelPath)
     {
-        return Path.Combine(ExcelModifyDirtyPath, JsonNameFactory(Path.GetFileNameWithoutExtension(excelPath)));
+        return Path.Combine(_ExcelModifyDirtyPath, JsonNameFactory(Path.GetFileNameWithoutExtension(excelPath)));
     }
 
     private static void CheckExcelRecodingTime(string excelPath, ref List<string> updatedExcel)
     {
         var jsonFilePath = GetExcelModifyTimeJson(excelPath);
-        var jsonData = JsonUtil.ParseJsonFile(jsonFilePath);
+        var jsonData = JsonUtil.ParseJsonFile<JsonUtil.JsonDataBase>(jsonFilePath) as JsonUtil.JsonDataBase;
 
         if (jsonData == null || jsonData.children.Count == 0)
         {
-            Console.WriteLine("No valid JSON data found.");
+            Debug.LogError("Excel Export Error :: No valid JSON data found.");
             return;
         }
 
@@ -115,7 +142,7 @@ public class ExcelExport
 
         if (firstChild == null)
         {
-            Console.WriteLine("The first child is not a valid JObject.");
+            Debug.LogError("Excel Export Error :: The first child is not a valid JObject.");
             return;
         }
 
@@ -131,7 +158,7 @@ public class ExcelExport
 
     private static string[][] ReadExcel(string excelFilePath)
     {
-        using (var stream = File.Open(Path.Combine(ExcelExport.excelPath, Path.GetFileName(excelFilePath)),
+        using (var stream = File.Open(Path.Combine(ExcelExport._excelPath, Path.GetFileName(excelFilePath)),
                    FileMode.Open, FileAccess.Read))
         {
             using (var reader = ExcelReaderFactory.CreateReader(stream))
@@ -163,7 +190,7 @@ public class ExcelExport
 
     private static string GetExcelScript(string excelPath)
     {
-        return Path.Combine(excelScriptPath, ScriptNameFactory(Path.GetFileNameWithoutExtension(excelPath)));
+        return Path.Combine(_excelScriptPath, ScriptNameFactory(Path.GetFileNameWithoutExtension(excelPath)));
     }
 
     private static bool GenerateDataStructScript(string excelPath, string[][] excelData)
@@ -184,13 +211,13 @@ public class ExcelExport
         content.AppendLine("using System.Collections.Generic;");
         content.AppendLine("using System.Collections.Generic;");
 
-        content.AppendLine($"public class {excelName}_excel_data");
+        content.AppendLine($"public class {ExcelDataStructNameFactory(excelPath)}");
         content.AppendLine("{");
         for (var i = 0; i < excelData.Length; i++)
         {
             if (!ObjectUtil.HasType(excelData[i][1]))
             {
-                Debug.LogError($"Excel Export Error :: {excelName} has not defined type");
+                Debug.LogError($"Excel Export Error :: {excelName} has not defined type :: {excelData[i][1]}");
                 return false;
             }
 
@@ -214,12 +241,74 @@ public class ExcelExport
 
         content.AppendLine($"public class {excelName}_excel");
         content.AppendLine("{");
-        content.AppendLine($"\tprivate var _cacheData = new Dictionary<{excel_id.type}, {excelName}_excel_data>();");
-        
+        content.AppendLine(
+            $"\tprivate Dictionary<{excel_id.type}, {ExcelDataStructNameFactory(excelPath)}> _cacheData = new Dictionary<{excel_id.type}, {ExcelDataStructNameFactory(excelPath)}>();");
+
         content.AppendLine("}");
 
         File.WriteAllText(excelScriptPath, content.ToString());
 
         return true;
+    }
+
+    private static string ExcelDataStructNameFactory(string excelPath)
+    {
+        var excelFileName = Path.GetFileNameWithoutExtension(excelPath);
+        return $"{excelFileName}_Excel_Data";
+    }
+
+    private static string DataJsonNameFactory(string excelFileName)
+    {
+        return $"{excelFileName}_data.json";
+    }
+
+    private static string GetExcelDataJson(string excelPath)
+    {
+        return Path.Combine(_excelDataJsonPath, DataJsonNameFactory(Path.GetFileNameWithoutExtension(excelPath)));
+    }
+
+    private static int getDataStructRetryCount = 0;
+    private static bool GenerateExcelDataJson(string excelPath)
+    {
+        TryDeleteExcelDataJson(excelPath);
+        
+        var dataStructType = ObjectUtil.GetType(ExcelDataStructNameFactory(excelPath));
+        if (dataStructType == null)
+        {
+            if (getDataStructRetryCount++ >= 10)
+            {
+                EditorApplication.update -= OnScriptForcedCompile;
+                Debug.LogError($"Excel Export Error :: Not found {dataStructType}");
+                getDataStructRetryCount = 0;
+                return false;
+            }
+            Debug.LogWarning($"Excel Export :: Retry found {dataStructType}");
+            return false;
+        }
+
+        var data = Activator.CreateInstance(dataStructType);
+
+        JsonUtil.GenerateJsonFile(data, GetExcelDataJson(excelPath));
+        return true;
+    }
+
+    private static void TryDeleteExcelModifyTimeJson(string excelPath)
+    {
+        var targetExcelModifyTimeJsonPath = GetExcelDataJson(excelPath);
+
+        if (File.Exists(targetExcelModifyTimeJsonPath))
+        {
+            File.Delete(targetExcelModifyTimeJsonPath);
+        }
+    }
+
+    private static void TryDeleteExcelDataJson(string excelPath)
+    {
+        var targetExcelDataJsonPath = GetExcelDataJson(excelPath);
+
+        if (File.Exists(targetExcelDataJsonPath))
+        {
+            File.Delete(targetExcelDataJsonPath);
+        }
     }
 }

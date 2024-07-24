@@ -85,6 +85,7 @@ namespace Util
         /// <returns></returns>
         public static bool HasType(string typeName)
         {
+            ComplementaryTypeShorthand(ref typeName);
             var type = Type.GetType(typeName);
 
             if (type == null)
@@ -98,6 +99,50 @@ namespace Util
             }
 
             return type != null;
+        }
+
+        public static Type GetType(string typeName)
+        {
+            var type = Type.GetType(typeName);
+
+            if (type == null)
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    type = assembly.GetType(typeName);
+                    if (type != null)
+                        break;
+                }
+            }
+
+            return type;
+        }
+
+        /// <summary>
+        /// 补全类型名简写
+        /// </summary>
+        /// <param name="typeName"></param>
+        public static void ComplementaryTypeShorthand(ref string typeName)
+        {
+            typeName = typeName switch
+            {
+                "byte" => "System.Byte",
+                "sbyte" => "System.SByte",
+                "short" => "System.Int16",
+                "ushort" => "System.UInt16",
+                "int" => "System.Int32",
+                "uint" => "System.UInt32",
+                "long" => "System.Int64",
+                "ulong" => "System.UInt64",
+                "float" => "System.Single",
+                "double" => "System.Double",
+                "decimal" => "System.Decimal",
+                "bool" => "System.Boolean",
+                "char" => "System.Char",
+                "string" => "System.String",
+                "object" => "System.Object",
+                _ => typeName
+            };
         }
     }
 }
