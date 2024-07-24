@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Util
 {
@@ -31,10 +32,23 @@ namespace Util
 
             try
             {
-                o.GetType().GetField(fieldName).SetValue(value, 0);
+                var fieldInfo = o.GetType().GetField(fieldName);
+                if (fieldInfo.FieldType.IsValueType)
+                {
+                    object convertedValue = Convert.ChangeType(value, fieldInfo.FieldType);
+                    var typedReference = __makeref(o);
+                    fieldInfo.SetValueDirect(typedReference, convertedValue);
+                }
+                else
+                {
+                    fieldInfo.SetValue(o, value);
+                }
             }
             catch (Exception e)
             {
+                #if DEBUG
+                    Debug.LogError($"set {o.ToString()} field name -> {fieldName} error :: " + e);
+                #endif
                 return false;
             }
             
@@ -72,6 +86,7 @@ namespace Util
             }
             catch (Exception e)
             {
+                Debug.LogError($"set {o.ToString()} property name -> {propertyName} error :: " + e);
                 return false;
             }
             

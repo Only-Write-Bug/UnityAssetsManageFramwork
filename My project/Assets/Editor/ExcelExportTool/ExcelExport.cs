@@ -23,6 +23,7 @@ public class ExcelExport
     private static string _excelDataJsonPath = null;
 
     private static string _curExportExcelPath = null;
+    private static string[][] _curExcelData = null;
     
     private static float _compileWaitTime = 0f;
     private static readonly float compileWaitDuration = 3f;
@@ -38,6 +39,7 @@ public class ExcelExport
             var excelData = DataStructUtil.Reverse2DArray(ReadExcel(excelPath));
             if (excelData == null)
                 continue;
+            _curExcelData = excelData;
             if (GenerateDataStructScript(excelPath, excelData))
             {
                 _curExportExcelPath = excelPath;
@@ -48,6 +50,7 @@ public class ExcelExport
             {
                 TryDeleteExcelModifyTimeJson(excelPath);
                 TryDeleteExcelDataJson(excelPath);
+                _curExcelData = null;
             }
         }
     }
@@ -74,6 +77,7 @@ public class ExcelExport
                 {
                     EditorApplication.update -= OnScriptForcedCompile;
                     _curExportExcelPath = null;
+                    _curExcelData = null;
                     Debug.Log("Excel Export Over!!!");
                 }
                 _compileWaitTime = 0f; // 重置等待时间
@@ -209,7 +213,8 @@ public class ExcelExport
 
         content.AppendLine("using System;");
         content.AppendLine("using System.Collections.Generic;");
-        content.AppendLine("using System.Collections.Generic;");
+        
+        content.AppendLine("");
 
         content.AppendLine($"public class {ExcelDataStructNameFactory(excelPath)}");
         content.AppendLine("{");
@@ -239,6 +244,8 @@ public class ExcelExport
 
         content.AppendLine("}");
 
+        content.AppendLine("");
+        
         content.AppendLine($"public class {excelName}_excel");
         content.AppendLine("{");
         content.AppendLine(
@@ -286,10 +293,28 @@ public class ExcelExport
             return false;
         }
 
-        var data = Activator.CreateInstance(dataStructType);
+        GenerateExcelDataObject(dataStructType, out var dataContainer);
 
-        JsonUtil.GenerateJsonFile(data, GetExcelDataJson(excelPath));
+        JsonUtil.GenerateJsonFile(dataContainer, GetExcelDataJson(excelPath));
         return true;
+    }
+
+    private static void GenerateExcelDataObject(Type dataType, out List<object> dataContainer)
+    {
+        dataContainer = new List<object>();
+
+        if (_curExcelData.Length < 1 || _curExcelData[0].Length < 2)
+            return;
+        for (var i = 2; i < _curExcelData[0].Length; i++)
+        {
+            var data = Activator.CreateInstance(dataType);
+            for (var j = 0; j < _curExcelData.Length; j++)
+            {
+                ObjectUtil.TryModifyField(data, _curExcelData[j][0], _curExcelData[j][i]);
+                Debug.Log($"type = {_curExcelData[j][1]}, name = {_curExcelData[j][0]}, value = {_curExcelData[j][i]}");
+            }
+            dataContainer.Add(data);
+        }
     }
 
     private static void TryDeleteExcelModifyTimeJson(string excelPath)
