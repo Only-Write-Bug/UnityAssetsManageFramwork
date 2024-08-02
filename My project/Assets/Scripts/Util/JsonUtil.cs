@@ -51,6 +51,12 @@ namespace Util
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
         
+        /// <summary>
+        /// 保存Json文件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="jsonPath"></param>
+        /// <typeparam name="T"></typeparam>
         public static void SaveJsonFile<T>(T data, string jsonPath)
         {
             var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
