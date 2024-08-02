@@ -7,7 +7,11 @@ namespace Util
 {
     public static class JsonUtil
     {
-        public class JsonDataBase
+        public abstract class JsonDataBase
+        {
+            
+        }
+        public class JsonDataModel : JsonDataBase
         {
             public string key = null;
             public List<object> children = new List<object>();

@@ -28,6 +28,12 @@ public class ExcelExport
     private static float _compileWaitTime = 0f;
     private static readonly float compileWaitDuration = 3f;
 
+    [MenuItem("Editor Tool/test")]
+    public static void Test()
+    {
+        CommonPath_Excel.init.Load();
+    }
+
     [MenuItem("Editor Tool/Excel Export")]
     public static void Export()
     {
@@ -117,7 +123,7 @@ public class ExcelExport
 
     private static void CreateModifyTimeJson(string excelPath)
     {
-        var jsonData = new JsonUtil.JsonDataBase
+        var jsonData = new JsonUtil.JsonDataModel
         {
             key = Path.GetFileNameWithoutExtension(excelPath)
         };
@@ -134,7 +140,7 @@ public class ExcelExport
     private static void CheckExcelRecodingTime(string excelPath, ref List<string> updatedExcel)
     {
         var jsonFilePath = GetExcelModifyTimeJson(excelPath);
-        var jsonData = JsonUtil.ParseJsonFile<JsonUtil.JsonDataBase>(jsonFilePath) as JsonUtil.JsonDataBase;
+        var jsonData = JsonUtil.ParseJsonFile<JsonUtil.JsonDataModel>(jsonFilePath) as JsonUtil.JsonDataModel;
 
         if (jsonData == null || jsonData.children.Count == 0)
         {
@@ -213,10 +219,12 @@ public class ExcelExport
 
         content.AppendLine("using System;");
         content.AppendLine("using System.Collections.Generic;");
+        content.AppendLine("using Tools;");
+        content.AppendLine("using Util;");
         
         content.AppendLine("");
 
-        content.AppendLine($"public class {ExcelDataStructNameFactory(excelPath)}");
+        content.AppendLine($"public class {ExcelDataStructNameFactory(excelPath)} : JsonUtil.JsonDataBase");
         content.AppendLine("{");
         for (var i = 0; i < excelData.Length; i++)
         {
@@ -246,11 +254,18 @@ public class ExcelExport
 
         content.AppendLine("");
         
-        content.AppendLine($"public class {excelName}_excel");
+        content.AppendLine($"public class {excelName}_Excel");
         content.AppendLine("{");
+        content.AppendLine($"\tprivate static {excelName}_Excel _init = null;");
+        content.AppendLine($"\tpublic static {excelName}_Excel init => _init ??= new {excelName}_Excel();\n");
         content.AppendLine(
             $"\tprivate Dictionary<{excel_id.type}, {ExcelDataStructNameFactory(excelPath)}> _cacheData = new Dictionary<{excel_id.type}, {ExcelDataStructNameFactory(excelPath)}>();");
 
+        content.AppendLine("\tpublic void Load()");
+        content.AppendLine("\t{");
+        content.AppendLine("\t\tforeach (var data in ExcelReader.init.LoadExcelDataJson())");
+        content.AppendLine($"\t\t\t_cacheData.TryAdd(data.Key, data.Value as {ExcelDataStructNameFactory(excelPath)});");
+        content.AppendLine("\t}");
         content.AppendLine("}");
 
         File.WriteAllText(excelScriptPath, content.ToString());
@@ -311,7 +326,6 @@ public class ExcelExport
             for (var j = 0; j < _curExcelData.Length; j++)
             {
                 ObjectUtil.TryModifyField(data, _curExcelData[j][0], _curExcelData[j][i]);
-                Debug.Log($"type = {_curExcelData[j][1]}, name = {_curExcelData[j][0]}, value = {_curExcelData[j][i]}");
             }
             dataContainer.Add(data);
         }
