@@ -254,6 +254,7 @@ public class ExcelExport
 
         content.AppendLine("");
         
+        content.AppendLine("[CustomExcel]");
         content.AppendLine($"public class {excelName}_Excel");
         content.AppendLine("{");
         content.AppendLine($"\tprivate static {excelName}_Excel _init = null;");

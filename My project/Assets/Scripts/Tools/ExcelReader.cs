@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using Util;
@@ -21,7 +22,22 @@ namespace Tools
 
         public void LoadAllExcels()
         {
-            
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var type in types)
+            {
+                if (type.GetCustomAttributes(typeof(CustomExcelAttribute), true).Length > 0)
+                {
+                    var initProperty = type.GetProperty("init", BindingFlags.Static | BindingFlags.Public);
+                    if (initProperty!= null)
+                    {
+                        var loadMethod = type.GetMethod("Load");
+                        if (loadMethod != null)
+                        {
+                            loadMethod.Invoke(initProperty.GetValue(null), null);
+                        }
+                    }
+                }
+            }
         }
 
         public Dictionary<long, JsonUtil.JsonDataBase> LoadExcelDataJson()
