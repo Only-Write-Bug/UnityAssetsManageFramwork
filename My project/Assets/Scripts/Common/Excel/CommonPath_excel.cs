@@ -22,4 +22,9 @@ public class CommonPath_Excel
 		foreach (var data in ExcelReader.init.LoadExcelDataJson())
 			_cacheData.TryAdd(data.Key, data.Value as CommonPath_Excel_Data);
 	}
+
+	public CommonPath_Excel_Data GetDataById(long id)
+	{
+		return _cacheData.GetValueOrDefault(id);
+	}
 }

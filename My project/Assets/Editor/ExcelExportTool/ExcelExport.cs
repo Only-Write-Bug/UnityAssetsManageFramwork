@@ -267,6 +267,11 @@ public class ExcelExport
         content.AppendLine("\t\tforeach (var data in ExcelReader.init.LoadExcelDataJson())");
         content.AppendLine($"\t\t\t_cacheData.TryAdd(data.Key, data.Value as {ExcelDataStructNameFactory(excelPath)});");
         content.AppendLine("\t}");
+        content.AppendLine("");
+        content.AppendLine($"\tpublic {ExcelDataStructNameFactory(excelPath)} GetDataById(long id)");
+        content.AppendLine("\t{");
+        content.AppendLine("\t\treturn _cacheData.GetValueOrDefault(id);");
+        content.AppendLine("\t}");
         content.AppendLine("}");
 
         File.WriteAllText(excelScriptPath, content.ToString());
