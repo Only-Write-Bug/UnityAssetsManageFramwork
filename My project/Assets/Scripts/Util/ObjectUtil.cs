@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace Util
@@ -116,6 +119,11 @@ namespace Util
             return type != null;
         }
 
+        /// <summary>
+        /// 根据类型名称获取类型
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
         public static Type GetType(string typeName)
         {
             var type = Type.GetType(typeName);
@@ -158,6 +166,23 @@ namespace Util
                 "object" => "System.Object",
                 _ => typeName
             };
+        }
+
+        /// <summary>
+        /// 深拷贝对象
+        /// </summary>
+        /// <param name="self"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T DeepCopy<T>(this T self) where T : class
+        {
+            using (var ms = new MemoryStream())
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(ms, self);
+                ms.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(ms);
+            }
         }
     }
 }
