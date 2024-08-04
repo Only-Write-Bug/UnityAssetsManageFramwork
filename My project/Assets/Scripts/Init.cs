@@ -8,6 +8,11 @@ namespace DefaultNamespace
     {
         private void Start()
         {
+            InitBaseFeatures();
+        }
+
+        private void InitBaseFeatures()
+        {
             ExcelReader.init.LoadAllExcels();
         }
     }
