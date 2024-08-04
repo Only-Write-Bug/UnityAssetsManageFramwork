@@ -28,12 +28,6 @@ public class ExcelExport
     private static float _compileWaitTime = 0f;
     private static readonly float compileWaitDuration = 3f;
 
-    [MenuItem("Editor Tool/test")]
-    public static void Test()
-    {
-        CommonPath_Excel.init.Load();
-    }
-
     [MenuItem("Editor Tool/Excel Export")]
     public static void Export()
     {
@@ -265,7 +259,7 @@ public class ExcelExport
         content.AppendLine("\tpublic void Load()");
         content.AppendLine("\t{");
         content.AppendLine("\t\tforeach (var data in ExcelReader.init.LoadExcelDataJson())");
-        content.AppendLine($"\t\t\t_cacheData.TryAdd(data.Key, data.Value as {ExcelDataStructNameFactory(excelPath)});");
+        content.AppendLine($"\t\t\t_cacheData[data.Key] = data.Value as {ExcelDataStructNameFactory(excelPath)};");
         content.AppendLine("\t}");
         content.AppendLine("");
         content.AppendLine($"\tpublic {ExcelDataStructNameFactory(excelPath)} GetDataById(long id)");

@@ -20,7 +20,7 @@ public class CommonPath_Excel
 	public void Load()
 	{
 		foreach (var data in ExcelReader.init.LoadExcelDataJson())
-			_cacheData.TryAdd(data.Key, data.Value as CommonPath_Excel_Data);
+			_cacheData[data.Key] = data.Value as CommonPath_Excel_Data;
 	}
 
 	public CommonPath_Excel_Data GetDataById(long id)
