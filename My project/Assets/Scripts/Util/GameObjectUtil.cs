@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -20,21 +21,23 @@ namespace Util
         public class CustomComponentData
         {
             public string type;
-            public Dictionary<string, object> properties = new Dictionary<string, object>();
+
+            public Dictionary<string, (string type, object obj)> properties =
+                new Dictionary<string, (string type, object obj)>();
         }
-        
+
         public static CustomSerializeGameObjectData CustomSerialize(this GameObject obj)
         {
             var data = new CustomSerializeGameObjectData();
 
             data.name = obj.name;
             data.id = obj.GetInstanceID();
-            
+
             foreach (var component in obj.GetComponents<Component>())
             {
                 data.components.Add(component.CustomSerialize());
             }
-            
+
             for (var i = 0; i < obj.transform.childCount; i++)
             {
                 var child = obj.transform.GetChild(i).gameObject;
@@ -49,18 +52,26 @@ namespace Util
             var data = new CustomComponentData();
 
             data.type = component.GetType().ToString();
-            foreach (var property in component.GetType().GetProperties())
+            foreach (var property in component.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                // if (property.IsDefined(typeof(ObsoleteAttribute), true))
-                //     continue;
-                // if (property.GetIndexParameters().Length > 0)
-                //     continue;
-                // if(!property.CanRead)
-                //     continue;
-                // if(property.Name.Equals("rigidbody") || property.Name.Equals("rigidbody2D") || property.Name.Equals("particleSystem"))
-                //     continue;
-
-                data.properties[property.PropertyType.ToString()] = property.GetValue(component);
+                if (property.IsDefined(typeof(ObsoleteAttribute), true))
+                    continue;
+                if (property.GetIndexParameters().Any())
+                    continue;
+                if (!property.CanRead)
+                    continue;
+        
+                try
+                {
+                    var value = property.GetValue(component);
+                    if (value != null && value.GetType().IsClass && value.GetType().Assembly == typeof(GameObject).Assembly)
+                        continue;
+                    data.properties[property.Name] = (property.PropertyType.ToString(), value);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Prefab Export Error :: {component.gameObject}.{component} :: {e}");
+                }
             }
 
             return data;

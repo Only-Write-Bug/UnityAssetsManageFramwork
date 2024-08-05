@@ -1,8 +1,11 @@
 ﻿using System.IO;
+using Newtonsoft.Json.Linq;
+using Unity.Plastic.Newtonsoft.Json;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Util;
+using Formatting = Newtonsoft.Json.Formatting;
 using Selection = UnityEditor.Selection;
 
 namespace Editor.PrefabExportTool
@@ -25,9 +28,11 @@ namespace Editor.PrefabExportTool
                 IOUtil.GetLastDirectory(prefabPath, Path.GetFileName(prefabPath)).ToLower().Splicing(prefabKey, ref prefabKey);
                 
                 var prefabJsonPath = Path.Combine(prefabJsonDirectory, prefabKey + ".json");
+                if(File.Exists(prefabJsonPath))
+                    File.Delete(prefabJsonPath);
                 
-                var data = (o as GameObject).CustomSerialize();
-                JsonUtil.GenerateJsonFileIgnoreLoop(data, prefabJsonPath);
+                var jsonContext = (o as GameObject).CustomSerialize().Serialize().json;
+                File.WriteAllText(prefabJsonPath, JObject.Parse(jsonContext).ToString(Formatting.Indented));
             }
         }
     }

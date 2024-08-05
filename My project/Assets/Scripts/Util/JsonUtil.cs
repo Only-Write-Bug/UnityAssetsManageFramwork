@@ -29,24 +29,6 @@ namespace Util
             File.Delete(generatePath);
             File.WriteAllText(generatePath, jsonString);
         }
-        
-        /// <summary>
-        /// 生成json文件(忽略循环调用)
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="generatePath"></param>
-        /// <typeparam name="T"></typeparam>
-        public static void GenerateJsonFileIgnoreLoop<T>(T data, string generatePath)
-        {
-            var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            });
-            if(File.Exists(generatePath))
-                File.Delete(generatePath);
-            
-            File.WriteAllText(generatePath, jsonString);
-        }
 
         /// <summary>
         /// 解析json文件
