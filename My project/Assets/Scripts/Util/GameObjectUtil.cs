@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace Util
@@ -10,15 +12,15 @@ namespace Util
         {
             public string name;
             public int id;
-            public List<CustomComponentData> components;
-            public List<CustomSerializeGameObjectData> children;
+            public List<CustomComponentData> components = new List<CustomComponentData>();
+            public List<CustomSerializeGameObjectData> children = new List<CustomSerializeGameObjectData>();
         }
 
         [System.Serializable]
         public class CustomComponentData
         {
             public string type;
-            public Dictionary<string, object> properties;
+            public Dictionary<string, object> properties = new Dictionary<string, object>();
         }
         
         public static CustomSerializeGameObjectData CustomSerialize(this GameObject obj)
@@ -28,10 +30,15 @@ namespace Util
             data.name = obj.name;
             data.id = obj.GetInstanceID();
             
-            data.components = new List<CustomComponentData>();
             foreach (var component in obj.GetComponents<Component>())
             {
-                Debug.Log(component);
+                data.components.Add(component.CustomSerialize());
+            }
+            
+            for (var i = 0; i < obj.transform.childCount; i++)
+            {
+                var child = obj.transform.GetChild(i).gameObject;
+                data.children.Add(child.CustomSerialize());
             }
 
             return data;
@@ -40,6 +47,21 @@ namespace Util
         public static CustomComponentData CustomSerialize(this Component component)
         {
             var data = new CustomComponentData();
+
+            data.type = component.GetType().ToString();
+            foreach (var property in component.GetType().GetProperties())
+            {
+                // if (property.IsDefined(typeof(ObsoleteAttribute), true))
+                //     continue;
+                // if (property.GetIndexParameters().Length > 0)
+                //     continue;
+                // if(!property.CanRead)
+                //     continue;
+                // if(property.Name.Equals("rigidbody") || property.Name.Equals("rigidbody2D") || property.Name.Equals("particleSystem"))
+                //     continue;
+
+                data.properties[property.PropertyType.ToString()] = property.GetValue(component);
+            }
 
             return data;
         }

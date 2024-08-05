@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Util
 {
@@ -26,6 +27,24 @@ namespace Util
         {
             var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.Delete(generatePath);
+            File.WriteAllText(generatePath, jsonString);
+        }
+        
+        /// <summary>
+        /// 生成json文件(忽略循环调用)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="generatePath"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void GenerateJsonFileIgnoreLoop<T>(T data, string generatePath)
+        {
+            var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            });
+            if(File.Exists(generatePath))
+                File.Delete(generatePath);
+            
             File.WriteAllText(generatePath, jsonString);
         }
 
@@ -62,6 +81,36 @@ namespace Util
         {
             var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(jsonPath, jsonString);
+        }
+    }
+
+    public class CustomGameObjectDictionaryConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var dict = (Dictionary<string, object>)value;
+            var jObject = new JObject();
+            foreach (var kvp in dict)
+            {
+                jObject.Add(kvp.Key, JToken.FromObject(kvp.Value, serializer));
+            }
+            jObject.WriteTo(writer);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var jObject = JObject.Load(reader);
+            var dict = new Dictionary<string, object>();
+            foreach (var kvp in jObject)
+            {
+                dict[kvp.Key] = kvp.Value.ToObject<object>(serializer);
+            }
+            return dict;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Dictionary<string, object>);
         }
     }
 }

@@ -1,0 +1,152 @@
+{
+  "name": "mainPanel",
+  "id": 33444,
+  "components": [
+    {
+      "type": "UnityEngine.RectTransform",
+      "properties": {}
+    },
+    {
+      "type": "UnityEngine.CanvasRenderer",
+      "properties": {}
+    },
+    {
+      "type": "UnityEngine.UI.Image",
+      "properties": {}
+    }
+  ],
+  "children": [
+    {
+      "name": "Image",
+      "id": 33604,
+      "components": [
+        {
+          "type": "UnityEngine.RectTransform",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.CanvasRenderer",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.UI.Image",
+          "properties": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "name": "Text (Legacy)",
+      "id": 33652,
+      "components": [
+        {
+          "type": "UnityEngine.RectTransform",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.CanvasRenderer",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.UI.Text",
+          "properties": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "name": "Panel",
+      "id": 33716,
+      "components": [
+        {
+          "type": "UnityEngine.RectTransform",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.CanvasRenderer",
+          "properties": {}
+        },
+        {
+          "type": "UnityEngine.UI.Image",
+          "properties": {}
+        }
+      ],
+      "children": [
+        {
+          "name": "Toggle",
+          "id": 33818,
+          "components": [
+            {
+              "type": "UnityEngine.RectTransform",
+              "properties": {}
+            },
+            {
+              "type": "UnityEngine.UI.Toggle",
+              "properties": {}
+            }
+          ],
+          "children": [
+            {
+              "name": "Background",
+              "id": 33824,
+              "components": [
+                {
+                  "type": "UnityEngine.RectTransform",
+                  "properties": {}
+                },
+                {
+                  "type": "UnityEngine.CanvasRenderer",
+                  "properties": {}
+                },
+                {
+                  "type": "UnityEngine.UI.Image",
+                  "properties": {}
+                }
+              ],
+              "children": [
+                {
+                  "name": "Checkmark",
+                  "id": 33842,
+                  "components": [
+                    {
+                      "type": "UnityEngine.RectTransform",
+                      "properties": {}
+                    },
+                    {
+                      "type": "UnityEngine.CanvasRenderer",
+                      "properties": {}
+                    },
+                    {
+                      "type": "UnityEngine.UI.Image",
+                      "properties": {}
+                    }
+                  ],
+                  "children": []
+                }
+              ]
+            },
+            {
+              "name": "Label",
+              "id": 33830,
+              "components": [
+                {
+                  "type": "UnityEngine.RectTransform",
+                  "properties": {}
+                },
+                {
+                  "type": "UnityEngine.CanvasRenderer",
+                  "properties": {}
+                },
+                {
+                  "type": "UnityEngine.UI.Text",
+                  "properties": {}
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

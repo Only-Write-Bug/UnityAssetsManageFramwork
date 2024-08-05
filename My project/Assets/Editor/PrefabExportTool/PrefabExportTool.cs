@@ -14,6 +14,8 @@ namespace Editor.PrefabExportTool
         {
             CommonPath_Excel.init.Load();
             var prefabJsonDirectory = Path.Combine(Directory.GetCurrentDirectory(), CommonPath_Excel.init.GetDataById(100001).path);
+            IOUtil.TryCreateDirectory(prefabJsonDirectory);
+            
             foreach (var o in Selection.objects)
             {
                 var prefabPath = AssetDatabase.GetAssetPath(o);
@@ -22,8 +24,10 @@ namespace Editor.PrefabExportTool
                 var prefabKey = Path.GetFileNameWithoutExtension(prefabPath);
                 IOUtil.GetLastDirectory(prefabPath, Path.GetFileName(prefabPath)).ToLower().Splicing(prefabKey, ref prefabKey);
                 
-                var prefabJsonPath = Path.Combine(prefabJsonDirectory, prefabKey);
+                var prefabJsonPath = Path.Combine(prefabJsonDirectory, prefabKey + ".json");
+                
                 var data = (o as GameObject).CustomSerialize();
+                JsonUtil.GenerateJsonFileIgnoreLoop(data, prefabJsonPath);
             }
         }
     }
