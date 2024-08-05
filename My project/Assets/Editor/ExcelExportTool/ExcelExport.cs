@@ -53,6 +53,7 @@ public class ExcelExport
                 _curExcelData = null;
             }
         }
+        Debug.Log("Excel Export Over!!!");
     }
 
     private static bool CheckDirectory()
@@ -78,7 +79,6 @@ public class ExcelExport
                     EditorApplication.update -= OnScriptForcedCompile;
                     _curExportExcelPath = null;
                     _curExcelData = null;
-                    Debug.Log("Excel Export Over!!!");
                 }
                 _compileWaitTime = 0f; // 重置等待时间
             }

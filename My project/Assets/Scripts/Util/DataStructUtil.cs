@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Util
 {
@@ -47,6 +49,15 @@ namespace Util
             }
             
             return result;
+        }
+
+        public static string Splicing(this string self, string other, ref string result, char splicingChar = '_')
+        {
+            var resultSB = new StringBuilder();
+            resultSB.Append(self);
+            resultSB.Append(splicingChar);
+            resultSB.Append(other);
+            return result = resultSB.ToString();
         }
     }
 }

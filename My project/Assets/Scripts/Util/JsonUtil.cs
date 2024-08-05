@@ -25,6 +25,7 @@ namespace Util
         public static void GenerateJsonFile<T>(T data, string generatePath)
         {
             var jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
+            File.Delete(generatePath);
             File.WriteAllText(generatePath, jsonString);
         }
 
