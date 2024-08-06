@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json.Linq;
 using Unity.Plastic.Newtonsoft.Json;
 using Unity.VisualScripting;
@@ -16,7 +17,7 @@ namespace Editor.PrefabExportTool
         public static void ExportPrefab()
         {
             CommonPath_Excel.init.Load();
-            var prefabJsonDirectory = Path.Combine(Directory.GetCurrentDirectory(), CommonPath_Excel.init.GetDataById(100001).path);
+            var prefabJsonDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"Assets\Resources\JSON\Prefabs");
             IOUtil.TryCreateDirectory(prefabJsonDirectory);
             
             foreach (var o in Selection.objects)
@@ -31,8 +32,18 @@ namespace Editor.PrefabExportTool
                 if(File.Exists(prefabJsonPath))
                     File.Delete(prefabJsonPath);
                 
-                var jsonContext = (o as GameObject).CustomSerialize().Serialize().json;
-                File.WriteAllText(prefabJsonPath, JObject.Parse(jsonContext).ToString(Formatting.Indented));
+                try
+                {
+                    var jsonContext = (o as GameObject).CustomSerialize().Serialize().json;
+                    File.WriteAllText(prefabJsonPath, JObject.Parse(jsonContext).ToString(Formatting.Indented));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    throw;
+                }
+                Debug.Log($"{o.name} Export Successfully");
+                Debug.Log($"{o.name} json path :: {prefabJsonPath}");
             }
         }
     }

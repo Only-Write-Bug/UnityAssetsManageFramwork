@@ -28,7 +28,7 @@ public class ExcelExport
     private static float _compileWaitTime = 0f;
     private static readonly float compileWaitDuration = 3f;
 
-    [MenuItem("Editor Tool/Excel Export")]
+    [MenuItem("AssetManager/Editor Tool/Excel Export")]
     public static void Export()
     {
         if (!CheckDirectory())

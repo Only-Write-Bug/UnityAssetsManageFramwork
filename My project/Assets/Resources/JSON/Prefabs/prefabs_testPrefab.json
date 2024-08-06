@@ -1,0 +1,648 @@
+{
+  "name": "testPrefab",
+  "id": 23300,
+  "components": [
+    {
+      "type": "UnityEngine.RectTransform",
+      "properties": {
+        "rect": {
+          "Item1": "UnityEngine.Rect",
+          "Item2": {
+            "xMin": 0.0,
+            "yMin": 0.0,
+            "xMax": 0.0,
+            "yMax": 0.0,
+            "$type": "UnityEngine.Rect"
+          }
+        },
+        "anchorMin": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "anchorMax": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 1.0,
+            "y": 1.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "anchoredPosition": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "sizeDelta": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "pivot": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.5,
+            "y": 0.5,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "anchoredPosition3D": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "offsetMin": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "offsetMax": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "drivenByObject": {
+          "Item1": "UnityEngine.Object",
+          "Item2": null
+        },
+        "position": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "localPosition": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "eulerAngles": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "localEulerAngles": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "right": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "up": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "forward": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "rotation": {
+          "Item1": "UnityEngine.Quaternion",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0,
+            "$type": "UnityEngine.Quaternion"
+          }
+        },
+        "localRotation": {
+          "Item1": "UnityEngine.Quaternion",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0,
+            "$type": "UnityEngine.Quaternion"
+          }
+        },
+        "localScale": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "parent": {
+          "Item1": "UnityEngine.Transform",
+          "Item2": null
+        },
+        "worldToLocalMatrix": {
+          "Item1": "UnityEngine.Matrix4x4",
+          "Item2": {
+            "m00": 1.0,
+            "m10": 0.0,
+            "m20": 0.0,
+            "m30": 0.0,
+            "m01": 0.0,
+            "m11": 1.0,
+            "m21": 0.0,
+            "m31": 0.0,
+            "m02": 0.0,
+            "m12": 0.0,
+            "m22": 1.0,
+            "m32": 0.0,
+            "m03": 0.0,
+            "m13": 0.0,
+            "m23": 0.0,
+            "m33": 1.0,
+            "$type": "UnityEngine.Matrix4x4"
+          }
+        },
+        "localToWorldMatrix": {
+          "Item1": "UnityEngine.Matrix4x4",
+          "Item2": {
+            "m00": 1.0,
+            "m10": 0.0,
+            "m20": 0.0,
+            "m30": 0.0,
+            "m01": 0.0,
+            "m11": 1.0,
+            "m21": 0.0,
+            "m31": 0.0,
+            "m02": 0.0,
+            "m12": 0.0,
+            "m22": 1.0,
+            "m32": 0.0,
+            "m03": 0.0,
+            "m13": 0.0,
+            "m23": 0.0,
+            "m33": 1.0,
+            "$type": "UnityEngine.Matrix4x4"
+          }
+        },
+        "childCount": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 0,
+            "$type": "System.Int32"
+          }
+        },
+        "lossyScale": {
+          "Item1": "UnityEngine.Vector3",
+          "Item2": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "$type": "UnityEngine.Vector3"
+          }
+        },
+        "hasChanged": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "hierarchyCapacity": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 1,
+            "$type": "System.Int32"
+          }
+        },
+        "hierarchyCount": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 1,
+            "$type": "System.Int32"
+          }
+        },
+        "tag": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "Untagged",
+            "$type": "System.String"
+          }
+        },
+        "name": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "testPrefab",
+            "$type": "System.String"
+          }
+        },
+        "hideFlags": {
+          "Item1": "UnityEngine.HideFlags",
+          "Item2": {
+            "$content": "",
+            "$type": "UnityEngine.HideFlags"
+          }
+        }
+      }
+    },
+    {
+      "type": "UnityEngine.CanvasRenderer",
+      "properties": {
+        "hasPopInstruction": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "materialCount": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 0,
+            "$type": "System.Int32"
+          }
+        },
+        "popMaterialCount": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 0,
+            "$type": "System.Int32"
+          }
+        },
+        "absoluteDepth": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": -1,
+            "$type": "System.Int32"
+          }
+        },
+        "hasMoved": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "cullTransparentMesh": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "hasRectClipping": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "relativeDepth": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": -1,
+            "$type": "System.Int32"
+          }
+        },
+        "cull": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "clippingSoftness": {
+          "Item1": "UnityEngine.Vector2",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "$type": "UnityEngine.Vector2"
+          }
+        },
+        "tag": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "Untagged",
+            "$type": "System.String"
+          }
+        },
+        "name": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "testPrefab",
+            "$type": "System.String"
+          }
+        },
+        "hideFlags": {
+          "Item1": "UnityEngine.HideFlags",
+          "Item2": {
+            "$content": "",
+            "$type": "UnityEngine.HideFlags"
+          }
+        }
+      }
+    },
+    {
+      "type": "UnityEngine.UI.Image",
+      "properties": {
+        "type": {
+          "Item1": "UnityEngine.UI.Image+Type",
+          "Item2": {
+            "$content": "Sliced",
+            "$type": "UnityEngine.UI.Image+Type"
+          }
+        },
+        "preserveAspect": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "fillCenter": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "fillMethod": {
+          "Item1": "UnityEngine.UI.Image+FillMethod",
+          "Item2": {
+            "$content": "Radial360",
+            "$type": "UnityEngine.UI.Image+FillMethod"
+          }
+        },
+        "fillAmount": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 1.0,
+            "$type": "System.Single"
+          }
+        },
+        "fillClockwise": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "fillOrigin": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 0,
+            "$type": "System.Int32"
+          }
+        },
+        "alphaHitTestMinimumThreshold": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 0.0,
+            "$type": "System.Single"
+          }
+        },
+        "useSpriteMesh": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "hasBorder": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "pixelsPerUnitMultiplier": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 1.0,
+            "$type": "System.Single"
+          }
+        },
+        "pixelsPerUnit": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 2.0,
+            "$type": "System.Single"
+          }
+        },
+        "minWidth": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 0.0,
+            "$type": "System.Single"
+          }
+        },
+        "preferredWidth": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 10.0,
+            "$type": "System.Single"
+          }
+        },
+        "flexibleWidth": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": -1.0,
+            "$type": "System.Single"
+          }
+        },
+        "minHeight": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 0.0,
+            "$type": "System.Single"
+          }
+        },
+        "preferredHeight": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": 10.0,
+            "$type": "System.Single"
+          }
+        },
+        "flexibleHeight": {
+          "Item1": "System.Single",
+          "Item2": {
+            "$content": -1.0,
+            "$type": "System.Single"
+          }
+        },
+        "layoutPriority": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": 0,
+            "$type": "System.Int32"
+          }
+        },
+        "onCullStateChanged": {
+          "Item1": "UnityEngine.UI.MaskableGraphic+CullStateChangedEvent",
+          "Item2": {
+            "m_PersistentCalls": {
+              "m_Calls": []
+            },
+            "$type": "UnityEngine.UI.MaskableGraphic+CullStateChangedEvent"
+          }
+        },
+        "maskable": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "isMaskingGraphic": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "color": {
+          "Item1": "UnityEngine.Color",
+          "Item2": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 0.392,
+            "$type": "UnityEngine.Color"
+          }
+        },
+        "raycastTarget": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "raycastPadding": {
+          "Item1": "UnityEngine.Vector4",
+          "Item2": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0,
+            "$type": "UnityEngine.Vector4"
+          }
+        },
+        "depth": {
+          "Item1": "System.Int32",
+          "Item2": {
+            "$content": -1,
+            "$type": "System.Int32"
+          }
+        },
+        "canvas": {
+          "Item1": "UnityEngine.Canvas",
+          "Item2": null
+        },
+        "canvasRenderer": {
+          "Item1": "UnityEngine.CanvasRenderer",
+          "Item2": {
+            "$content": 0,
+            "$type": "UnityEngine.Object"
+          }
+        },
+        "destroyCancellationToken": {
+          "Item1": "System.Threading.CancellationToken",
+          "Item2": {
+            "$type": "System.Threading.CancellationToken"
+          }
+        },
+        "useGUILayout": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "runInEditMode": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "enabled": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": true,
+            "$type": "System.Boolean"
+          }
+        },
+        "isActiveAndEnabled": {
+          "Item1": "System.Boolean",
+          "Item2": {
+            "$content": false,
+            "$type": "System.Boolean"
+          }
+        },
+        "tag": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "Untagged",
+            "$type": "System.String"
+          }
+        },
+        "name": {
+          "Item1": "System.String",
+          "Item2": {
+            "$content": "testPrefab",
+            "$type": "System.String"
+          }
+        },
+        "hideFlags": {
+          "Item1": "UnityEngine.HideFlags",
+          "Item2": {
+            "$content": "",
+            "$type": "UnityEngine.HideFlags"
+          }
+        }
+      }
+    }
+  ],
+  "children": [],
+  "$type": "Util.GameObjectUtil+CustomSerializeGameObjectData"
+}
