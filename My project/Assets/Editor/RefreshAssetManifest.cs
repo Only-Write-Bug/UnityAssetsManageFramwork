@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using UnityEditor;
@@ -27,6 +28,9 @@ namespace Editor
 
             _elements.Clear();
             xml.Save(manifestXmlFilePath);
+
+            RefreshAssetsKeyScript(root);
+            AssetDatabase.Refresh();
             Debug.Log("AssetManifest refreshed");
         }
 
@@ -49,6 +53,29 @@ namespace Editor
                 }
                 root.Add(new XElement(key, new XAttribute("path", json)));
             }
+        }
+
+        private static void RefreshAssetsKeyScript(XElement root)
+        {
+            var assetKeyScript = Path.Combine(Directory.GetCurrentDirectory(), @"Assets\Scripts\Common\Key\AssetsKey.cs");
+
+            if (File.Exists(assetKeyScript))
+            {
+                File.Delete(assetKeyScript);
+            }
+
+            var content = new StringBuilder();
+            content.AppendLine("public class AssetsKey");
+            content.AppendLine("{");
+
+            foreach (var element in root.Elements())
+            {
+                content.AppendLine($"\tpublic static readonly string {element.Name} = @\"{element.Attribute("path").Value}\";");
+            }
+            
+            content.AppendLine("}");
+
+            File.WriteAllText(assetKeyScript, content.ToString());
         }
     }
 }

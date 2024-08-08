@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AssetManager.PrefabManager;
 using Newtonsoft.Json.Linq;
 using Unity.Plastic.Newtonsoft.Json;
 using Unity.VisualScripting;
@@ -13,6 +14,12 @@ namespace Editor.PrefabExportTool
 {
     public static class PrefabExportTool
     {
+        [MenuItem("Assets/Export Prefab/Test Create Prefab")]
+        public static void TestCreatePrefab()
+        {
+            PrefabManager.init.CreatePrefab(AssetsKey.mainview_mainPanel);
+        }
+        
         [MenuItem("Assets/Export Prefab", false, priority = 1)]
         public static void ExportPrefab()
         {

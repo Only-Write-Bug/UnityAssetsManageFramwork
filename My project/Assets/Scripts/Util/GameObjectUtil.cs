@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Util
 {
@@ -24,6 +28,11 @@ namespace Util
 
             public Dictionary<string, (string type, object obj)> properties =
                 new Dictionary<string, (string type, object obj)>();
+        }
+
+        public static void Destroy(this GameObject self)
+        {
+            Object.Destroy(self);
         }
 
         public static CustomSerializeGameObjectData CustomSerialize(this GameObject obj)
@@ -75,6 +84,15 @@ namespace Util
             }
 
             return data;
+        }
+
+        public static CustomSerializeGameObjectData ParsePrefabJson(string filePath)
+        {
+            var serializationData = new SerializationData(File.ReadAllText(filePath));
+            var customGameObjectData = new object();
+            serializationData.DeserializeInto(ref customGameObjectData);
+            customGameObjectData = customGameObjectData as CustomSerializeGameObjectData;
+            return null;
         }
 
         public static GameObject DeserializeGameObject(CustomSerializeGameObjectData data)
