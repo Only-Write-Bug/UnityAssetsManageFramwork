@@ -69,11 +69,12 @@ namespace Util
                     continue;
                 if (!property.CanRead)
                     continue;
-        
+
                 try
                 {
                     var value = property.GetValue(component);
-                    if (value != null && value.GetType().IsClass && value.GetType().Assembly == typeof(GameObject).Assembly)
+                    if (value != null && value.GetType().IsClass &&
+                        value.GetType().Assembly == typeof(GameObject).Assembly)
                         continue;
                     data.properties[property.Name] = (property.PropertyType.ToString(), value);
                 }
@@ -91,18 +92,59 @@ namespace Util
             var serializationData = new SerializationData(File.ReadAllText(filePath));
             var customGameObjectData = new object();
             serializationData.DeserializeInto(ref customGameObjectData);
-            customGameObjectData = customGameObjectData as CustomSerializeGameObjectData;
-            return null;
+            return customGameObjectData as CustomSerializeGameObjectData;
         }
 
-        public static GameObject DeserializeGameObject(CustomSerializeGameObjectData data)
+        public static GameObject DeserializeGameObject(this CustomSerializeGameObjectData data)
         {
-            return null;
+            var go = new GameObject(data.name);
+
+            if (data.components.Count > 0)
+            {
+                foreach (var customComponentData in data.components)
+                {
+                    var component = customComponentData.DeserializeComponent();
+                    go.AddComponent(component.GetType());
+                }
+            }
+
+            return go;
         }
 
-        public static Component DeserializeComponent(CustomComponentData data)
+        public static Component DeserializeComponent(this CustomComponentData data)
         {
-            return null;
+            Type componentType = Type.GetType(data.type);
+            Component component = null;
+
+            if (componentType != null)
+            {
+                component = Object.Instantiate(Activator.CreateInstance(componentType)) as Component;
+
+                // 设置组件的字段值
+                if (data.properties != null)
+                {
+                    foreach (var pair in data.properties)
+                    {
+                        var fieldInfo = componentType.GetField(pair.Key,
+                            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (fieldInfo != null)
+                        {
+                            fieldInfo.SetValue(component, pair.Value);
+                        }
+                        else
+                        {
+                            var propertyInfo = componentType.GetProperty(pair.Key,
+                                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                            if (propertyInfo != null && propertyInfo.CanWrite)
+                            {
+                                propertyInfo.SetValue(component, pair.Value);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return component;
         }
     }
 }
